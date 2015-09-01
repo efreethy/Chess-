@@ -13,13 +13,8 @@ class Piece
     self.class
   end
 
-
   def add_self_to_board
     @board[@pos] = self
-  end
-
-  def moves
-    #return array of possible moves
   end
 
   def valid_moves
@@ -30,19 +25,17 @@ class Piece
     end
   end
 
+  def dup(new_board)
+    self.class.new(self.pos.dup, self.color, new_board)
+  end
+
+  private
+
   def dup_entire_board
     duped_board = Board.new(true)
     pieces = @board.grid.flatten.select {|piece| piece.is_a?(Piece)}
     pieces.each { |piece| piece.dup(duped_board) }
     duped_board
-  end
-
-  def dup(new_board)
-    self.class.new(self.pos.dup, self.color, new_board)
-  end
-
-  def to_s
-    "p"
   end
 
   def add_coord(pos1,pos2)
@@ -52,7 +45,6 @@ class Piece
   def out_of_bounds?(pos)
     pos.any? { |el| el < 0 || el > 7  }
   end
-
 end
 
 
@@ -62,15 +54,6 @@ class Pawn < Piece
     super(pos,color,board)
     get_permitted_directions
   end
-
-  def get_permitted_directions
-    if color == :white
-      @permitted_directions = [[-1,-1], [-1,0], [-1,1]]
-    else
-      @permitted_directions = [[1,-1], [1,0], [1,1]]
-    end
-  end
-
 
   def moves
     all_moves = []
@@ -88,6 +71,24 @@ class Pawn < Piece
       end
     end
 
+    all_moves = check_for_pawns(all_moves)
+  end
+
+  def to_s
+    color == :white ? "♙ " : "♟ "
+  end
+
+  private
+
+  def get_permitted_directions
+    if color == :white
+      @permitted_directions = [[-1,-1], [-1,0], [-1,1]]
+    else
+      @permitted_directions = [[1,-1], [1,0], [1,1]]
+    end
+  end
+
+  def check_for_pawns(all_moves)
     if pos[0] == 1 && @color == :black
       coor = add_coord([2,0],@pos)
       all_moves << coor unless @board[coor].is_a?(Piece) ||
@@ -97,12 +98,7 @@ class Pawn < Piece
       all_moves << coor unless @board[coor].is_a?(Piece)||
                         @board[[coor[0]+1,coor[1]]].is_a?(Piece)
     end
-
     all_moves
-  end
-
-  def to_s
-    color == :white ? "♙ " : "♟ "
   end
 end
 

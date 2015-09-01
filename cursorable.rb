@@ -7,10 +7,6 @@ module Cursorable
     "s" => :down,
     "d" => :right,
     "\r" => :return,
-    # "\n" => :newline,
-    # "\e" => :escape,
-    # "\177" => :backspace,
-    # "\004" => :delete,
     "\u0003" => :ctrl_c,
   }
 

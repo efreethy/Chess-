@@ -27,13 +27,11 @@ class Game
 
   def setup_display
       puts "#{@current_player.color.capitalize}, please make a move: "
-
       display.render
-
   end
 
   def setup_players
-    @player1, @player2 = HumanPlayer.new(@board, :white), HumanPlayer.new(@board, :black)
+    @player1, @player2 = HumanPlayer.new(@board, :white), ComputerPlayer.new(@board, :black)
     @players = [@player1, @player2]
     @current_player = @players.first
   end
@@ -50,9 +48,8 @@ class Game
 
   def switch_players!
     players.rotate!
-    current_player = players.first
+    @current_player = players.first
   end
-
 end
 
 

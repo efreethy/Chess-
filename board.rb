@@ -60,12 +60,16 @@ class Board
     pos.all? { |el| el >= 0 && el < 8 }
   end
 
+  def find_king(color)
+    king = @grid.flatten.find {|piece| piece.color == color && piece.is_a?(King)}
+    king.pos
+  end
+
   private
-  # attr_accessor :current_player_color
+
   def current_player_switch
     @current_player_color = (@current_player_color == :white) ? :black : :white
   end
-
 
   def opponents_pieces_moves(color)
     opponents = @grid.flatten.select {|piece| piece.color != color && piece.is_a?(Piece)}
@@ -73,6 +77,7 @@ class Board
     opponents.each { |piece| all_moves += piece.moves }
     all_moves
   end
+
   def setup_board
     [:black, :white].each do |color|
       load_pieces(color)
@@ -109,10 +114,7 @@ class Board
     end
   end
 
-  def find_king(color)
-    king = @grid.flatten.find {|piece| piece.color == color && piece.is_a?(King)}
-    king.pos
-  end
+
 
 end
 
