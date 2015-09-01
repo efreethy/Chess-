@@ -4,6 +4,7 @@ require_relative 'piece'
 
 class Board
   attr_reader :grid
+  attr_reader :current_player_color
 
   def initialize(duped = false)
     @grid = Array.new(8) { Array.new(8) {EmptySpace.new} }
@@ -17,10 +18,6 @@ class Board
     piece.pos = end_pos
     self[start] = EmptySpace.new
     self[end_pos] = piece
-  end
-
-  def rows
-    @grid
   end
 
   def[](pos)
@@ -64,7 +61,7 @@ class Board
   end
 
   private
-  attr_accessor :current_player_color
+  # attr_accessor :current_player_color
   def current_player_switch
     @current_player_color = (@current_player_color == :white) ? :black : :white
   end
@@ -124,6 +121,9 @@ class EmptySpace
     "  "
   end
   def color
+  end
+  def valid_moves
+    []
   end
 end
 

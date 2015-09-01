@@ -14,7 +14,7 @@ class Display
   end
 
   def build_grid
-    @board.rows.map.with_index do |row, i|
+    @board.grid.map.with_index do |row, i|
       build_row(row, i)
     end
   end
@@ -26,23 +26,47 @@ class Display
     end
   end
 
+  def possible_moves
+    board[@cursor].valid_moves
+  end
+
   def colors_for(i, j)
     if [i, j] == @cursor
-      bg = :light_red
+      bg = :light_cyan
     elsif (i + j).odd?
-      bg = :light_blue
+      bg = :light_red
     else
-      bg = :blue
+      bg = :light_brown
     end
-    { background: bg, color: :white }
+    { background: bg, color: :black, mode: :bold }
   end
 
   def render
     system("clear")
     # puts "#{@game.current_player.color}, please make a move: "
-    puts "Arrow keys, WASD, or vim to move, space or enter to confirm."
+    puts "Use WASD, to move, enter to confirm."
 
-    build_grid.each_with_index { |row, i| puts  "#{i+1}#{row.join}" }
+    grid = build_grid
+    # iterate over possible moves and colorize them in the grid
+    load_path_space(grid)
+    grid.each_with_index { |row, i| puts  "#{i+1} #{row.join}" }
     puts " A B C D E F G H".downcase
   end
+
+  private
+  attr_reader :board
+
+  def load_path_space(grid)
+    possible_moves.each do |move|
+      piece = grid[move[0]][move[1]]
+      # sleep(1)
+      # p @board[move].color, @board.current_player_color
+      # sleep(1)
+      if @board.current_player_color == @board[@cursor].color
+        grid[move[0]][move[1]] = piece.to_s.colorize({ background: :light_magenta,
+                                                         color: :light_white})
+      end
+    end
+  end
+
 end

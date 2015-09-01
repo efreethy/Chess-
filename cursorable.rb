@@ -2,16 +2,15 @@ require "io/console"
 
 module Cursorable
   KEYMAP = {
-    " " => :space,
     "w" => :up,
     "a" => :left,
     "s" => :down,
     "d" => :right,
     "\r" => :return,
-    "\n" => :newline,
-    "\e" => :escape,
-    "\177" => :backspace,
-    "\004" => :delete,
+    # "\n" => :newline,
+    # "\e" => :escape,
+    # "\177" => :backspace,
+    # "\004" => :delete,
     "\u0003" => :ctrl_c,
   }
 
@@ -31,7 +30,7 @@ module Cursorable
     case key
     when :ctrl_c
       exit 0
-    when :return, :space
+    when :return
       @cursor
     when :left, :right, :up, :down
       update_pos(MOVES[key])
