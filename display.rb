@@ -11,10 +11,10 @@ class Display
     @cursor = [0, 0]
     @selected = false
   end
-  
+
   def render
     system("clear")
-    puts "Use WASD, to move, enter to confirm."
+    puts "Use WASD to move, enter to confirm."
 
     grid = build_grid
     load_path_space(grid)

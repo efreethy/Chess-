@@ -10,15 +10,6 @@ class HumanPlayer
     @color = color
   end
 
-  def move
-    start = nil
-    until start
-      @display.render
-      start = @display.get_input
-    end
-    start
-  end
-
   def play_turn
     puts "Please make a move, use enter to select and place."
     start, end_pos = get_two_moves
@@ -39,6 +30,15 @@ class HumanPlayer
 
   private
 
+  def move
+    start = nil
+    until start
+      @display.render
+      start = @display.get_input
+    end
+    start
+  end
+
   def get_two_moves
     moves = []
     until moves.length == 2
@@ -50,12 +50,10 @@ class HumanPlayer
   def countdown
     [3,2,1].each do |idx|
       print "#{idx} "
-      sleep(1)
+      sleep(0.5)
     end
   end
-
 end
-
 
 class ComputerPlayer
   attr_reader :color
@@ -67,7 +65,14 @@ class ComputerPlayer
   end
 
   def play_turn
+    @bad_moves = []
     move = self.move
+    piece = @board[move[0]]
+    until piece.safe_move?(move)
+      @bad_moves << move[1]
+      move = self.move
+      piece = @board[move[0]]
+    end
     @board.move_piece(move[0], move[1])
   end
 
@@ -76,13 +81,16 @@ class ComputerPlayer
     pieces = @board.grab_pieces(color)
     movable_pieces = pieces.reject { |piece| piece.valid_moves.empty? }
     move = select_best_move(movable_pieces, opponents_king)
-    # best_piece = select_best_piece(movable_pieces, opponents_king)
   end
+
+  private
 
   def select_best_move(movable_pieces, opponents_king)
     valid_moves_hash = {}
     movable_pieces.each do |piece|
-      piece.valid_moves.each {|move| valid_moves_hash[move] = piece}
+      piece.valid_moves.each do |move|
+        valid_moves_hash[move] = piece unless @bad_moves.include?(move)
+      end
     end
     smallest_distance = nil
     best_move = nil
@@ -99,27 +107,7 @@ class ComputerPlayer
     [valid_moves_hash[best_move].pos, best_move]
   end
 
-
-  def select_best_piece(movable_pieces, opponents_king)
-    # best_piece = nil
-    # smallest_distance = nil
-    # king_pos = opponents_king.pos
-    #
-    # movable_pieces.each do |piece|
-    #   distance = get_distance(opponents_king,piece)
-    #   smallest_distance ||= distance
-    #   best_piece ||= piece
-    #   if distance < smallest_distance
-    #
-    #     smallest_distance = distance
-    #     best_piece = piece
-    #   end
-    # end
-  end
-  private
-
   def get_distance(pos1,pos2)
-    # pos1, pos2 = piece1.pos, piece2.pos
     (pos1[0]-pos2[0]).abs + (pos1[1]-pos2[1]).abs
   end
 

@@ -35,6 +35,10 @@ class Board
     opponents_pieces_moves(color).any? { |pos| pos == king_pos }
   end
 
+  def safe?(color, our_pos)
+    !(opponents_pieces_moves(color).any? { |opp_move_pos| opp_move_pos == our_pos })
+  end
+
   def grab_pieces(color)
     pieces = @grid.flatten.select { |piece| piece.is_a?(Piece) && piece.color == color}
   end
@@ -113,9 +117,6 @@ class Board
       King.new(pos,color,self)
     end
   end
-
-
-
 end
 
 class EmptySpace

@@ -22,6 +22,7 @@ class Game
   end
 
   private
+  
   attr_reader :board, :display, :players
   attr_accessor :current_player
 
