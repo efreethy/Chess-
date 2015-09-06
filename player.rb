@@ -103,7 +103,11 @@ class ComputerPlayer
         best_move = move
       end
     end
+<<<<<<< HEAD
     valid_moves_hash
+=======
+    p valid_moves_hash
+>>>>>>> f9f57623c308e085fb65541d51892268da4ab539
     [valid_moves_hash[best_move].pos, best_move]
   end
 
